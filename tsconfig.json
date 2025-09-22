@@ -22,7 +22,10 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@config/*": ["src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@auth/*": ["./src/modules/auth/*"],
+      "@core/*": ["./src/modules/core/*"],
     }
   }
 }
