@@ -10,12 +10,12 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), JwtModule.register({})],
   providers: [
+    UserService,
+
+    AuthenticationService,
     AuthenticationFacade,
     AtStrategy,
     RtStrategy,
-    UserService,
-    AuthenticationService,
-    UserEntity,
   ],
   exports: [UserService],
   controllers: [AuthenticationController],

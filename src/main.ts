@@ -4,14 +4,19 @@ import { initSwagger } from '@config/swagger.config';
 import { ConsoleLogger, Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoggerWithoutClass } from './shared/utils/logger-without-class';
-
+import { AllExceptionsFilter } from '@config/exceptions';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {logger: new ConsoleLogger({})},);
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger({}),
+  });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3000);
   const logger = LoggerWithoutClass.instance;
 
+  app.setGlobalPrefix('pocket');
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   initSwagger(app);
   app.enableCors({
@@ -19,8 +24,8 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  
-    app.useGlobalPipes(
+
+  app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
@@ -30,7 +35,6 @@ async function bootstrap() {
       },
     }),
   );
-  
 
   await app.listen(port ?? 3000);
   logger.log(`Application is running on: ${await app.getUrl()}`);

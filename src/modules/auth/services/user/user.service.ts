@@ -26,11 +26,11 @@ export class UserService {
     return data;
   }
 
-  async findOneByUsername(login: LoginDto): Promise<UserEntity> {
+  async findOneByUsername(username: string): Promise<UserEntity> {
     try {
       this.logger.log('Iniciando la busqueda del usuario ');
       const data = await this.usersRepository.findOneByOrFail({
-        username: login.username,
+        username: username,
       });
 
       this.logger.log('Fin del usuario');
@@ -51,7 +51,49 @@ export class UserService {
     }
   }
 
-  async findOneById(id: number): Promise<UserEntity> {
+  async findOneByUsernameWithoutException(
+    username: string,
+  ): Promise<UserEntity | null> {
+    try {
+      this.logger.log('Iniciando la busqueda del usuario ');
+      const data = await this.usersRepository.findOneByOrFail({
+        username: username,
+      });
+
+      this.logger.log('Fin del usuario');
+      return data;
+    } catch (e) {
+      if (e instanceof EntityNotFoundError) {
+        return null;
+      } else {
+        const error = e as Error;
+        this.logger.error(`ERR: ${error.name}`);
+        this.logger.error(`ERR: ${error.message}`);
+        throw new BadRequestException(`Algo salio mal`);
+      }
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
+    try {
+      this.logger.log('Iniciando la busqueda del email ');
+      const data = await this.usersRepository.findOneByOrFail({ email });
+
+      this.logger.log('Fin del email');
+      return data;
+    } catch (e) {
+      if (e instanceof EntityNotFoundError) {
+        return null;
+      } else {
+        const error = e as Error;
+        this.logger.error(`ERR: ${error.name}`);
+        this.logger.error(`ERR: ${error.message}`);
+        throw new BadRequestException(`Algo salio mal`);
+      }
+    }
+  }
+
+  async findOneById(id: string): Promise<UserEntity> {
     try {
       this.logger.log('Iniciando la busqueda del usuario ');
       const data = await this.usersRepository.findOneByOrFail({
@@ -97,7 +139,7 @@ export class UserService {
     return newUser;
   }
 
-  async updateRtHash(id: number, refreshToken: string) {
+  async updateRtHash(id: string, refreshToken: string) {
     this.logger.log('Modificando el refresh token');
     const user = await this.usersRepository.update(id, { refreshToken });
 
@@ -115,7 +157,7 @@ export class UserService {
     return user;
   }
 
-  async updateUsersWithRefreshToken(id: number) {
+  async updateUsersWithRefreshToken(id: string) {
     this.logger.log(id);
     const users = await this.usersRepository.findBy({
       id,

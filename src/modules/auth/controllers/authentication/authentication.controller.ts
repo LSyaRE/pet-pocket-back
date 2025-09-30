@@ -34,7 +34,7 @@ export class AuthenticationController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AtGuard)
-  public logout(@GetCurrentUserId() userId: number) {
+  public logout(@GetCurrentUserId() userId: string) {
     return this.authenticationFacade.logout(userId);
   }
 
@@ -47,7 +47,7 @@ export class AuthenticationController {
   @UseGuards(RtGuard)
   @Post('refresh')
   public refresh(
-    @GetCurrentUserId() userId: number,
+    @GetCurrentUserId() userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string,
   ): any {
     return this.authenticationFacade.refresh({ userId, refreshToken });

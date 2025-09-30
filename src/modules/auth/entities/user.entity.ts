@@ -1,11 +1,34 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { StatusTable } from '@shared/consts/status-table.const';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-  @PrimaryGeneratedColumn('identity', {
-    comment: 'Clave primaria de los usuarios.',
+  @PrimaryGeneratedColumn('uuid', {
+    comment: 'Clave primaria.',
   })
-  id: number;
+  id: string;
+
+  @Column({ nullable: true, comment: 'Usuario que creo el registro' })
+  createdBy: string;
+
+  @Column({ nullable: true, comment: 'Usuario que actualizo el registro' })
+  updatedBy: string;
+
+  @CreateDateColumn({ comment: 'Fecha de creacion del registro' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ comment: 'Fecha de actualizacion del registro' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ comment: 'Fecha de eliminacion del registro' })
+  deletedAt?: Date;
 
   @Column({
     comment: 'Usuario de la persona que va a ingresar.',
@@ -32,5 +55,5 @@ export class UserEntity {
     default: true,
     comment: 'Estado de la cuenta para su uso',
   })
-  isActive: boolean;
+  status: StatusTable;
 }
