@@ -6,9 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '@auth/entities';
 import { AtStrategy, RtStrategy } from './strategies';
 import { JwtModule } from '@nestjs/jwt';
+import { authDatabaseProviders } from '@auth/providers';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), JwtModule.register({})],
+  imports: [
+    TypeOrmModule.forFeature([...authDatabaseProviders]),
+    JwtModule.register({}),
+  ],
   providers: [
     UserService,
 

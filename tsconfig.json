@@ -25,7 +25,8 @@
 			"@config/*": ["./src/config/*"],
 			"@shared/*": ["./src/shared/*"],
 			"@auth/*": ["./src/modules/auth/*"],
-			"@core/*": ["./src/modules/core/*"]
+			"@core/*": ["./src/modules/core/*"],
+			"@comercial/*": ["./src/modules/comercial/*"]
 		}
 	}
 }

@@ -3,10 +3,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function initSwagger(app: INestApplication<any>) {
   const config = new DocumentBuilder()
-    .setTitle('Iot water')
-    .setDescription('Proyecto para medir el agua')
-    .setVersion('0.0.1')
-    .addTag('water')
+    .setTitle('Pet Pocket API')
+    .setDescription('Veterinary management system API')
+    .setVersion('0.1.0')
+    .addTag('pet', 'pocket')
     .addBearerAuth()
     .build();
 

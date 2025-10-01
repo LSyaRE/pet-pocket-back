@@ -27,7 +27,10 @@ export class AuthenticationFacade {
       `Verificando la contraseña del usuario ${payload.username}`,
     );
     await this.authService.passwordMatch(payload.password, user.password);
-    const tokens = await this.authService.regenerateTokens(user.id, user.username) 
+    const tokens = await this.authService.regenerateTokens(
+      user.id,
+      user.username,
+    );
     return {
       data: tokens,
       message: 'Login exitoso',
@@ -77,19 +80,22 @@ export class AuthenticationFacade {
 
   // Para colocar el token en una blacklist si es que aun no se expira
   logout(userId: string): GenericResponse<void> {
-    this.userService.updateUsersWithRefreshToken(userId)
+    this.userService.updateUsersWithRefreshToken(userId);
     return {
-  message: 'Se cerro la sesion correctamente',
-  statusCode: 200,
-  timestamp: new Date().toISOString()
-};
+      message: 'Se cerro la sesion correctamente',
+      statusCode: 200,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   restorePassword(identity: number) {
     return identity;
   }
 
-  async refresh(data: { userId: string; refreshToken: string }): Promise<GenericResponse<TokensDto>> {
+  async refresh(data: {
+    userId: string;
+    refreshToken: string;
+  }): Promise<GenericResponse<TokensDto>> {
     this.logger.log('Refrescando token...');
     const user = await this.userService.findOneById(data.userId);
 
@@ -107,6 +113,6 @@ export class AuthenticationFacade {
       message: 'Tokens refrescados correctamente',
       statusCode: 200,
       timestamp: new Date().toISOString(),
-    }; 
+    };
   }
 }
