@@ -20,7 +20,7 @@ export class AuthenticationController {
 
   @Public()
   @Post('login')
-  public login(@Body() payload: LoginDto): any {
+  public login(@Body() payload: LoginDto) {
     return this.authenticationFacade.login(payload);
   }
 
@@ -39,7 +39,7 @@ export class AuthenticationController {
   }
 
   @Post('restore-password')
-  public restorePassword(): any {
+  public restorePassword() {
     return this.authenticationFacade.restorePassword(0);
   }
 
@@ -49,7 +49,7 @@ export class AuthenticationController {
   public refresh(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string,
-  ): any {
+  ) {
     return this.authenticationFacade.refresh({ userId, refreshToken });
   }
 }
